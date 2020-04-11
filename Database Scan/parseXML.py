@@ -16,7 +16,7 @@ import xml.etree.ElementTree
 tibia_xml_file = 'tibiawiki_pages_current.xml'
 database_file = 'database.db'
 cache_file = 'tempcache'
-tag_prefix = '{http://www.mediawiki.org/xml/export-0.6/}'
+tag_prefix = '{http://www.mediawiki.org/xml/export-0.10/}'
 
 def getTag(tag): return tag_prefix + tag
 
