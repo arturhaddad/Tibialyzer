@@ -54,13 +54,14 @@ def parseNPC(title, attributes, c, spells, getURL):
     if 'job' in attributes and (job == None or 'guild leader' in attributes['job'].lower()):
         job = attributes['job']
     url = "http://tibia.wikia.com/wiki/%s" % (title.replace(' ', '_'))
-    image = getImage(url, getURL, imageRegex)
-    if image == None or image == False:
-        url = "http://tibia.wikia.com/wiki/File:%s.gif" % (title.replace(' ', '_'))
-        image = getImage(url, getURL, imageRegex2)
-        if image == None or image == False:
-            print('failed to get image for npc', title)
-            return False
+    image = None
+    # image = getImage(url, getURL, imageRegex)
+    # if image == None or image == False:
+    #     url = "http://tibia.wikia.com/wiki/File:%s.gif" % (title.replace(' ', '_'))
+    #     image = getImage(url, getURL, imageRegex2)
+    #     if image == None or image == False:
+    #         print('failed to get image for npc', title)
+    #         return False
     c.execute('INSERT INTO NPCs (title,name, city, job, x, y, z, image) VALUES (?,?,?,?,?,?,?,?)', (title,name, city, job, posx, posy, posz, image))
     npcid = c.lastrowid
     if 'sells' in attributes and 'teaches' in attributes['sells'].lower():

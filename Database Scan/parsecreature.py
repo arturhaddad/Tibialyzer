@@ -134,12 +134,13 @@ def parseCreature(title, attributes, c, creaturedrops, getURL):
         # if there are commas in brackets (300-500, Fire Damage) => replace the comma with a semicolon (for later splitting purposes)
         abilities = re.sub(r'(\([^,)]+)\,([^)]+\))', '\g<1>;\g<2>', b)
     url = "http://tibia.wikia.com/wiki/%s" % (title.replace(' ', '_'))
-    image = getImage(url, getURL, imageRegex, crop_image)
-    if image == None or image == False:
-        url = "http://tibia.wikia.com/wiki/File:%s.gif" % (title.replace(' ', '_'))
-        image = getImage(url, getURL, imageRegex2, crop_image)
-        if image == None or image == False:
-            print('failed to get image for creature', title)
+    image = None
+    # image = getImage(url, getURL, imageRegex, crop_image)
+    # if image == None or image == False:
+    #     url = "http://tibia.wikia.com/wiki/File:%s.gif" % (title.replace(' ', '_'))
+    #     image = getImage(url, getURL, imageRegex2, crop_image)
+    #     if image == None or image == False:
+    #         print('failed to get image for creature', title)
 
     # add stuff to database
     c.execute('INSERT INTO Creatures (title,name,health,experience,maxdamage,summon,illusionable,pushable,pushes,physical,holy,death,fire,energy,ice,earth,drown,lifedrain,paralysable,senseinvis,image,abilities,speed,armor,boss) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',

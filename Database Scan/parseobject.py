@@ -37,13 +37,14 @@ def parseObject(title, attributes, c, getURL):
         print('object already exists', title)
         return False
     url = "http://tibia.wikia.com/wiki/%s" % (title.replace(' ', '_'))
-    image = getImage(url, getURL, imageRegex)
-    if image == None or image == False:
-        url = "http://tibia.wikia.com/wiki/File:%s.gif" % (title.replace(' ', '_'))
-        image = getImage(url, getURL, imageRegex2)
-        if image == None or image == False:
-            print('failed to get image for object', title)
-            return False
+    image = None
+    # image = getImage(url, getURL, imageRegex)
+    # if image == None or image == False:
+    #     url = "http://tibia.wikia.com/wiki/File:%s.gif" % (title.replace(' ', '_'))
+    #     image = getImage(url, getURL, imageRegex2)
+    #     if image == None or image == False:
+    #         print('failed to get image for object', title)
+    #         return False
     c.execute('INSERT INTO WorldObjects(title, name, image) VALUES (?,?,?)', (title, name, image))
     return True
 

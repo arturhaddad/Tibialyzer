@@ -109,12 +109,13 @@ def parseItem(title, attributes, c, buyitems, sellitems, currencymap, durationMa
     url = "http://tibia.wikia.com/wiki/%s" % (title.replace(' ', '_'))
     itemHTML = getURL(url, True)
     if itemHTML == None: return False
-    image = getImage(url, getURL, imageRegex, properly_crop_item)
-    if image == None or image == False:
-        url = "http://tibia.wikia.com/wiki/File:%s.gif" % (title.replace(' ', '_'))
-        image = getImage(url, getURL, imageRegex2, properly_crop_item)
-        if image == None or image == False:
-            print('failed to get image for item', title)
+    image = None
+    # image = getImage(url, getURL, imageRegex, properly_crop_item)
+    # if image == None or image == False:
+    #     url = "http://tibia.wikia.com/wiki/File:%s.gif" % (title.replace(' ', '_'))
+    #     image = getImage(url, getURL, imageRegex2, properly_crop_item)
+    #     if image == None or image == False:
+    #         print('failed to get image for item', title)
     match = lookRegex.search(itemHTML)
     look_text = None
     if match != None:

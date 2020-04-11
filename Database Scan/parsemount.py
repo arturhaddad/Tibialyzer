@@ -29,13 +29,14 @@ def parseMount(title, attributes, c, mountStuff, getURL):
     if 'speed' in attributes:
         speed = int(attributes['speed'])
     url = "http://tibia.wikia.com/wiki/%s" % (title.replace(' ', '_'))
-    image = getImage(url, getURL, imageRegex, crop_image)
-    if image == None:
-        url = "http://tibia.wikia.com/wiki/File:%s.gif" % (title.replace(' ', '_'))
-        image = getImage(url, getURL, imageRegex2, crop_image)
-        if image == None:
-            print('failed to get image for item', title)
-            return False
+    image = None
+    # image = getImage(url, getURL, imageRegex, crop_image)
+    # if image == None:
+    #     url = "http://tibia.wikia.com/wiki/File:%s.gif" % (title.replace(' ', '_'))
+    #     image = getImage(url, getURL, imageRegex2, crop_image)
+    #     if image == None:
+    #         print('failed to get image for item', title)
+    #         return False
     c.execute('INSERT INTO Mounts (title, name, tameitemid, tamecreatureid, speed, tibiastore, image) VALUES (?,?,?,?,?,?,?)', 
         (title, name, None, None, speed, False, image))
     mountid = c.lastrowid

@@ -53,8 +53,9 @@ def parseOutfit(title, attributes, c, getURL):
             index += 1
             match = re.search("href=\"([^\"]+/Outfit_%s_%s%s.gif/[^\"]+)\"" % (name.replace(' ','_'), gender, addon), mainHTML)
             if match == None: continue
-            imageURL = match.groups()[0].replace("&amp;", "&")
-            image = sqlite3.Binary(getURL(imageURL, False))
+            # imageURL = match.groups()[0].replace("&amp;", "&")
+            # image = sqlite3.Binary(getURL(imageURL, False))
+            image = None
             c.execute('INSERT INTO OutfitImages (outfitid, male, addon, image) VALUES (?,?,?,?)', (outfitid, gender == "Male", index, image))
             imageCount += 1
     if imageCount == 0:
