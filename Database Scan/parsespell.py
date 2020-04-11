@@ -83,10 +83,11 @@ def parseSpell(title, attributes, c, getURL):
         image = sqlite3.Binary(imageBinary)
     elif title == "Strong Ice Strike":
         imageBinary = getURL("http://vignette4.wikia.nocookie.net/tibia/images/0/04/Strong_Ice_Strike.gif/revision/latest?cb=20101205171332&path-prefix=en", False)
-        image = sqlite3.Binary(imageBinary)
-    if image == None:
-        print('failed to get image for spell', title)
-        return False
+        # image = sqlite3.Binary(imageBinary)
+        image = None
+    # if image == None:
+    #     print('failed to get image for spell', title)
+    #     return False
     c.execute('INSERT INTO Spells (name,words,element,cooldown,premium,promotion,levelrequired,goldcost,manacost,knight,paladin,sorcerer,druid,image) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)', (name, words, element, cooldown, premium, promotion, levelrequired, spellcost, mana, knight, paladin, sorcerer, druid, image))
     return True
 

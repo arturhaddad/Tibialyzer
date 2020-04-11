@@ -164,47 +164,47 @@ if not skipLoading:
             quest = title.replace('/Spoiler', '')
             questNPCs[quest] = re.findall('\[\[([^]|]+)(?:|[^]]+)?\]\]', lcontent)
         elif wordCount(lcontent, 'infobox hunt|') == 1 or wordCount(lcontent, 'infobox_hunt|') == 1:
-            #print('Hunt', title)
+            print('Hunt', title)
             if not parseHunt(title, attributes, c, content, huntcreatures, getURL):
                 print('Hunt failed', title)
         elif wordCount(lcontent, 'infobox quest') == 1 or wordCount(lcontent, 'infobox_quest') == 1:
-            #print('Quest', title)
+            print('Quest', title)
             if not parseQuest(title, attributes, c, rewardItems, questDangers, getURL):
                 print('Quest failed', title)
         elif wordCount(lcontent, '{{infobox item') == 1 or wordCount(lcontent, '{{infobox_item') == 1:
-            #print('Item', title)
+            print('Item', title)
             if not parseItem(title, attributes, c, buyitems, sellitems, currencymap, durationCostMap, getURL):
                 print('Item failed', title)
         elif wordCount(lcontent, '{{infobox npc') == 1 or wordCount(lcontent, '{{infobox_npc') == 1:
-            #print('NPC', title)
+            print('NPC', title)
             if not parseNPC(title, attributes, c, spells, getURL):
                 print('NPC failed', title)
         elif '{{infobox_spell' in lcontent or '{{infobox spell' in lcontent:
-            #print('Spell', title)
+            print('Spell', title)
             if not parseSpell(title, attributes, c, getURL):
                 print('Spell failed', title)
         elif wordCount(lcontent, '{{infobox creature') == 1 or wordCount(lcontent, '{{infobox_creature') == 1:
-            #print('Creature', title)
+            print('Creature', title)
             if not parseCreature(title, attributes, c, creaturedrops, getURL):
                 print('Creature failed', title)
         elif wordCount(lcontent, 'infobox outfit') == 1 or wordCount(lcontent, 'infobox_outfit') == 1:
-            #print('Outfit', title)
+            print('Outfit', title)
             if not parseOutfit(title, attributes, c, getURL):
                 print('Outfit failed', title)
         elif wordCount(lcontent, 'infobox mount') == 1 or wordCount(lcontent, 'infobox_mount') == 1:
-            #print('Mount', title)
+            print('Mount', title)
             if not parseMount(title, attributes, c, mountStuff, getURL):
                 print('Mount failed', title)
         elif wordCount(lcontent, 'infobox object') == 1 or wordCount(lcontent, 'infobox_object') == 1:
-            #print('Object', title)
+            print('Object', title)
             if not parseObject(title, attributes, c, getURL):
                 print('Object failed', title)
         elif wordCount(lcontent, '{{infobox key') == 1 or wordCount(lcontent, '{{infobox_key') == 1:
-            #print('Key', title)
+            print('Key', title)
             if not parseKey(title, attributes, c, keyItems, buyitems, sellitems, getURL):
                 print('Key failed', title)
         elif wordCount(lcontent, '{{infobox achievement') == 1 or wordCount(lcontent, '{{infobox_achievement') == 1:
-            #print('Achievement', title)
+            print('Achievement', title)
             if not parseAchievement(title, attributes, c, achievementReferences):
                 print('Achievement failed', title)
     saveCache(True)
