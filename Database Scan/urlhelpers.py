@@ -62,11 +62,13 @@ def getImage(url, getURL, regex, operation=None):
             print(url)
         imageBinary = getURL(url, False)
         if operation == None:
-            image = sqlite3.Binary(imageBinary)
-            addImage(initialURL, imageBinary)
+            image = None
+            # image = sqlite3.Binary(imageBinary)
+            # addImage(initialURL, imageBinary)
         else: 
             opResult = operation(imageBinary)
             addImage(initialURL, opResult)
-            image = sqlite3.Binary(opResult)
+            image = None
+            # image = sqlite3.Binary(opResult)
     if image == False: return None
     return image

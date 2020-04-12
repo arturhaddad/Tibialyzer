@@ -79,10 +79,11 @@ def parseSpell(title, attributes, c, getURL):
     image = None
     if match != None:
         url = match.groups()[0].replace('&amp;', '&')
-        imageBinary = getURL(url, False)
-        image = sqlite3.Binary(imageBinary)
+        # imageBinary = getURL(url, False)
+        image = None
+        # image = sqlite3.Binary(imageBinary)
     elif title == "Strong Ice Strike":
-        imageBinary = getURL("http://vignette4.wikia.nocookie.net/tibia/images/0/04/Strong_Ice_Strike.gif/revision/latest?cb=20101205171332&path-prefix=en", False)
+        # imageBinary = getURL("http://vignette4.wikia.nocookie.net/tibia/images/0/04/Strong_Ice_Strike.gif/revision/latest?cb=20101205171332&path-prefix=en", False)
         # image = sqlite3.Binary(imageBinary)
         image = None
     # if image == None:

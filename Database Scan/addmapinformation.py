@@ -47,7 +47,8 @@ for depth in range(0, len(map_images)):
     while True:
         try:
             r = urllib.request.urlopen(map_images[depth])
-            image = sqlite3.Binary(r.read())
+            # image = sqlite3.Binary(r.read())
+            image = None
             break
         except:
             print("Failed to acquire image %s, trying again..." % map_images[depth])
