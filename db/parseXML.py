@@ -354,36 +354,36 @@ for npcid,spelllist in iter(spells.items()):
         if _spell in spellMap:
             _spell = spellMap[_spell]
         c.execute('SELECT id, druid, paladin, sorcerer, knight FROM Spells WHERE LOWER(name)=?', (_spell,))
-        spellresults = c.fetchall()[0]
-        if len(spellresults) > 0:
-            spellid = spellresults[0]
-            c.execute('SELECT spellid,npcid FROM SpellNPCs WHERE spellid=? AND npcid=?', (spellid, npcid))
-            if len(c.fetchall()) > 0:
-                continue
-            c.execute('SELECT name,job FROM NPCs WHERE id=?', (npcid,))
-            results = c.fetchall()[0]
-            name = results[0].lower()
-            job = results[1].lower()
-            druid = False
-            paladin = False
-            sorcerer = False
-            knight = False
-            if 'druid' in job: druid = spellresults[1]
-            elif 'sorcerer' in job: sorcerer = spellresults[3]
-            elif 'knight' in job: knight = spellresults[4]
-            elif 'paladin' in job: paladin = spellresults[2]
+        # spellresults = c.fetchall()[0]
+        # if len(spellresults) > 0:
+        #     spellid = spellresults[0]
+        #     c.execute('SELECT spellid,npcid FROM SpellNPCs WHERE spellid=? AND npcid=?', (spellid, npcid))
+        #     if len(c.fetchall()) > 0:
+        #         continue
+        #     c.execute('SELECT name,job FROM NPCs WHERE id=?', (npcid,))
+        #     results = c.fetchall()[0]
+        #     name = results[0].lower()
+        #     job = results[1].lower()
+        #     druid = False
+        #     paladin = False
+        #     sorcerer = False
+        #     knight = False
+        #     if 'druid' in job: druid = spellresults[1]
+        #     elif 'sorcerer' in job: sorcerer = spellresults[3]
+        #     elif 'knight' in job: knight = spellresults[4]
+        #     elif 'paladin' in job: paladin = spellresults[2]
 
-            if name in npcTeachMap:
-                druid = npcTeachMap[name][0] and spellresults[1]
-                paladin = npcTeachMap[name][1] and spellresults[2]
-                sorcerer = npcTeachMap[name][2] and spellresults[3]
-                knight = npcTeachMap[name][3] and spellresults[4]
+        #     if name in npcTeachMap:
+        #         druid = npcTeachMap[name][0] and spellresults[1]
+        #         paladin = npcTeachMap[name][1] and spellresults[2]
+        #         sorcerer = npcTeachMap[name][2] and spellresults[3]
+        #         knight = npcTeachMap[name][3] and spellresults[4]
 
-            if druid == False and paladin == False and sorcerer == False and knight == False:
-                print('Unknown NPC spell vocation', name)
-            c.execute('INSERT INTO SpellNPCs(spellid, npcid, druid, paladin, sorcerer, knight) VALUES (?,?,?,?,?,?)', (spellid, npcid, druid, paladin, sorcerer, knight))
-        else:
-            pass#print("Unrecognized spell", spell)
+        #     if druid == False and paladin == False and sorcerer == False and knight == False:
+        #         print('Unknown NPC spell vocation', name)
+        #     c.execute('INSERT INTO SpellNPCs(spellid, npcid, druid, paladin, sorcerer, knight) VALUES (?,?,?,?,?,?)', (spellid, npcid, druid, paladin, sorcerer, knight))
+        # else:
+        pass#print("Unrecognized spell", spell)
 
 c.execute('DROP TABLE BuyItems')
 c.execute('CREATE TABLE BuyItems(itemid INTEGER, vendorid INTEGER, value INTEGER)')
