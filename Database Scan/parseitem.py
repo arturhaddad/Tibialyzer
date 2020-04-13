@@ -256,8 +256,8 @@ def parseItem(title, attributes, c, buyitems, sellitems, currencymap, durationMa
             c.execute('INSERT INTO ItemProperties(itemid, property, value) VALUES (?,?,?)', (itemid, 'Range', str(rng)))
         except: 
             pass
-    if 'atk_mod' in attributes and len(attributes['atk_mod'].strip()) > 0:
-        c.execute('INSERT INTO ItemProperties(itemid, property, value) VALUES (?,?,?)', (itemid, 'Atk+', attributes['atk_mod'].strip()))
-    if 'hit_mod' in attributes and len(attributes['atk_mod'].strip()) > 0:
-        c.execute('INSERT INTO ItemProperties(itemid, property, value) VALUES (?,?,?)', (itemid, 'Hit+', attributes['hit_mod'].strip()))
+    # if 'atk_mod' in attributes and len(attributes['atk_mod'].strip()) > 0:
+    #     c.execute('INSERT INTO ItemProperties(itemid, property, value) VALUES (?,?,?)', (itemid, 'Atk+', attributes['atk_mod'].strip()))
+    # if 'hit_mod' in attributes and len(attributes['atk_mod'].strip()) > 0:
+    #     c.execute('INSERT INTO ItemProperties(itemid, property, value) VALUES (?,?,?)', (itemid, 'Hit+', attributes['hit_mod'].strip()))
     return True
