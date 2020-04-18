@@ -105,16 +105,16 @@ def parseCreature(title, attributes, c, creaturedrops, getURL):
         except: pass
     bestiaryname = None
     if 'bestiaryname' in attributes:
-        bestiaryname = attributes['bestiaryname'])
+        bestiaryname = attributes['bestiaryname']
     bestiarytext = None
     if 'bestiarytext' in attributes:
-        bestiarytext = attributes['bestiarytext'])
+        bestiarytext = attributes['bestiarytext']
     bestiarylevel = None
     if 'bestiarylevel' in attributes:
-        bestiarylevel = attributes['bestiarylevel'])
+        bestiarylevel = attributes['bestiarylevel']
     occurrence = None
     if 'occurrence' in attributes:
-        occurrence = attributes['occurrence'])
+        occurrence = attributes['occurrence']
     
     illusionable = getBoolean(attributes,'illusionable')
     pushable = getBoolean(attributes,'pushable')
