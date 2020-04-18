@@ -99,6 +99,23 @@ def parseCreature(title, attributes, c, creaturedrops, getURL):
     if 'summon' in attributes:
         try: summon = int(attributes['summon'])
         except: pass
+    convince = None
+    if 'convince' in attributes:
+        try: convince = int(attributes['convince'])
+        except: pass
+    bestiaryname = None
+    if 'bestiaryname' in attributes:
+        bestiaryname = attributes['bestiaryname'])
+    bestiarytext = None
+    if 'bestiarytext' in attributes:
+        bestiarytext = attributes['bestiarytext'])
+    bestiarylevel = None
+    if 'bestiarylevel' in attributes:
+        bestiarylevel = attributes['bestiarylevel'])
+    occurrence = None
+    if 'occurrence' in attributes:
+        occurrence = attributes['occurrence'])
+    
     illusionable = getBoolean(attributes,'illusionable')
     pushable = getBoolean(attributes,'pushable')
     pushes = getBoolean(attributes,'pushes')
@@ -108,6 +125,7 @@ def parseCreature(title, attributes, c, creaturedrops, getURL):
     maxdmg = getMaxInteger(attributes,'maxdmg')
     physical = getInteger(attributes,'physicalDmgMod')
     holy = getInteger(attributes,'holyDmgMod')
+    heal = getInteger(attributes,'healMod')
     death = getInteger(attributes,'deathDmgMod')
     fire = getInteger(attributes,'fireDmgMod')
     energy = getInteger(attributes,'energyDmgMod')
@@ -116,9 +134,24 @@ def parseCreature(title, attributes, c, creaturedrops, getURL):
     drown = getInteger(attributes,'drownDmgMod')
     lifedrain = getInteger(attributes,'hpDrainDmgMod')
     speed = getInteger(attributes,'speed')
+    runsat = getInteger(attributes,'runsat')
     boss = False
     if 'isboss' in attributes and attributes['isboss'].lower().strip() == 'yes':
         boss = True
+    notes = None
+    if 'notes' in attributes:
+        # first take care of [[Fire Rune||Great Fireball]] => Great Fireball
+        b = re.sub(r'\[\[[^]|]+\|([^]]+)\]\]', '\g<1>', attributes['notes'])
+        # then take care of [[Fire Rune]] => Fire Rune
+        b = re.sub(r'\[\[([^]]+)\]\]', '\g<1>', b)
+        # sometimes there are links in single brackets [http:www.link.com] => remove htem
+        b = re.sub(r'\[[^]]+\]', '', b)
+        # if there are brackets without numbers, remove them (maybe not necessary)
+        b = re.sub(r'\(([^0-9]+)\)', '', b)
+        # replace double spaces with single spaces
+        b = b.replace('  ', ' ')
+        # if there are commas in brackets (300-500, Fire Damage) => replace the comma with a semicolon (for later splitting purposes)
+        notes = re.sub(r'(\([^,)]+)\,([^)]+\))', '\g<1>;\g<2>', b)
     abilities = None
     if 'abilities' in attributes:
         # first take care of [[Fire Rune||Great Fireball]] => Great Fireball
@@ -133,6 +166,34 @@ def parseCreature(title, attributes, c, creaturedrops, getURL):
         b = b.replace('  ', ' ')
         # if there are commas in brackets (300-500, Fire Damage) => replace the comma with a semicolon (for later splitting purposes)
         abilities = re.sub(r'(\([^,)]+)\,([^)]+\))', '\g<1>;\g<2>', b)
+    strategy = None
+    if 'strategy' in attributes:
+        # first take care of [[Fire Rune||Great Fireball]] => Great Fireball
+        b = re.sub(r'\[\[[^]|]+\|([^]]+)\]\]', '\g<1>', attributes['strategy'])
+        # then take care of [[Fire Rune]] => Fire Rune
+        b = re.sub(r'\[\[([^]]+)\]\]', '\g<1>', b)
+        # sometimes there are links in single brackets [http:www.link.com] => remove htem
+        b = re.sub(r'\[[^]]+\]', '', b)
+        # if there are brackets without numbers, remove them (maybe not necessary)
+        b = re.sub(r'\(([^0-9]+)\)', '', b)
+        # replace double spaces with single spaces
+        b = b.replace('  ', ' ')
+        # if there are commas in brackets (300-500, Fire Damage) => replace the comma with a semicolon (for later splitting purposes)
+        strategy = re.sub(r'(\([^,)]+)\,([^)]+\))', '\g<1>;\g<2>', b)
+    behaviour = None
+    if 'behaviour' in attributes:
+        # first take care of [[Fire Rune||Great Fireball]] => Great Fireball
+        b = re.sub(r'\[\[[^]|]+\|([^]]+)\]\]', '\g<1>', attributes['behaviour'])
+        # then take care of [[Fire Rune]] => Fire Rune
+        b = re.sub(r'\[\[([^]]+)\]\]', '\g<1>', b)
+        # sometimes there are links in single brackets [http:www.link.com] => remove htem
+        b = re.sub(r'\[[^]]+\]', '', b)
+        # if there are brackets without numbers, remove them (maybe not necessary)
+        b = re.sub(r'\(([^0-9]+)\)', '', b)
+        # replace double spaces with single spaces
+        b = b.replace('  ', ' ')
+        # if there are commas in brackets (300-500, Fire Damage) => replace the comma with a semicolon (for later splitting purposes)
+        behaviour = re.sub(r'(\([^,)]+)\,([^)]+\))', '\g<1>;\g<2>', b)
     url = "http://tibia.wikia.com/wiki/%s" % (title.replace(' ', '_'))
     image = None
     # image = getImage(url, getURL, imageRegex, crop_image)
@@ -143,8 +204,8 @@ def parseCreature(title, attributes, c, creaturedrops, getURL):
     #         print('failed to get image for creature', title)
 
     # add stuff to database
-    c.execute('INSERT INTO Creatures (title,name,health,experience,maxdamage,summon,illusionable,pushable,pushes,physical,holy,death,fire,energy,ice,earth,drown,lifedrain,paralysable,senseinvis,image,abilities,speed,armor,boss) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
-        (title,name, hp, exp, maxdmg, summon, illusionable, pushable, pushes, physical, holy, death, fire, energy, ice, earth, drown, lifedrain, paralysable, senseinvis, image, abilities, speed, armor,boss))
+    c.execute('INSERT INTO Creatures (title,name,health,experience,maxdamage,summon,illusionable,pushable,pushes,physical,holy,death,fire,energy,ice,earth,drown,lifedrain,paralysable,senseinvis,image,abilities,speed,armor,boss,notes,strategy,behaviour,convince,bestiaryname,bestiarytext,bestiarylevel,occurrence,heal,runsat) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+        (title,name, hp, exp, maxdmg, summon, illusionable, pushable, pushes, physical, holy, death, fire, energy, ice, earth, drown, lifedrain, paralysable, senseinvis, image, abilities, speed, armor, boss, notes, strategy, behaviour, convince, bestiaryname, bestiarytext, bestiarylevel, occurrence, heal, runsat))
     creatureid = c.lastrowid
 
     creaturedrops[creatureid] = dict()
