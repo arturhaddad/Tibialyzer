@@ -49,7 +49,8 @@ def parseItem(title, attributes, c, buyitems, sellitems, currencymap, durationMa
     actualMinValue = None
     actualMaxValue = None
     if 'value' in attributes: 
-        valueRange = re.sub('\(.+|[^0-9\-]', '', attributes['value']).split('-')
+        valueRange = attributes['value'].replace(' to ', '-').replace('on', '(')
+        valueRange = re.sub('\(.+|[^0-9\-]', '', valueRange).split('-')
         try:
             actualMinValue = int(valueRange[0])
             actualMinValue = actualMinValue if actualMinValue > 0 else None
@@ -63,16 +64,30 @@ def parseItem(title, attributes, c, buyitems, sellitems, currencymap, durationMa
     if 'npcvalue' in attributes:
         try:
             npcBuyValue = int(attributes['npcvalue'])
-            npcBuyValue = npcBuyValue if npcBuyValue > 0 else None
+            if npcBuyValue > 0
+                if actualMinValue == None or actualMinValue < npcBuyValue
+                    actualMinValue = npcBuyValue
+            else
+                npcBuyValue = None
         except:
             pass
     npcSellValue = None
     if 'npcprice' in attributes:
         try: 
             npcSellValue = int(attributes['npcprice'])
-            npcSellValue = npcSellValue if npcSellValue > 0 else None
+            if npcSellValue > 0
+                if actualMaxValue == None or actualMaxValue > npcSellValue
+                    actualMaxValue = npcSellValue
+            else
+                npcSellValue = None
         except: 
             pass
+    if actualMinValue != None and actualMaxValue != None
+        if actualMinValue > actualMaxValue
+            actualMinValue = actualMaxValue
+    elif actualMinValue == None and actualMaxValue != None
+        actualMinValue = actualMaxValue
+
     name = title
     if 'actualname' in attributes and len(attributes['actualname']) > 0:
         name = attributes['actualname']
