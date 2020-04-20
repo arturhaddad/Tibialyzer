@@ -64,10 +64,10 @@ def parseItem(title, attributes, c, buyitems, sellitems, currencymap, durationMa
     if 'npcvalue' in attributes:
         try:
             npcBuyValue = int(attributes['npcvalue'])
-            if npcBuyValue > 0
-                if actualMinValue == None or actualMinValue < npcBuyValue
+            if npcBuyValue > 0:
+                if actualMinValue == None or actualMinValue < npcBuyValue:
                     actualMinValue = npcBuyValue
-            else
+            else:
                 npcBuyValue = None
         except:
             pass
@@ -75,17 +75,17 @@ def parseItem(title, attributes, c, buyitems, sellitems, currencymap, durationMa
     if 'npcprice' in attributes:
         try: 
             npcSellValue = int(attributes['npcprice'])
-            if npcSellValue > 0
-                if actualMaxValue == None or actualMaxValue > npcSellValue
+            if npcSellValue > 0:
+                if actualMaxValue == None or actualMaxValue > npcSellValue:
                     actualMaxValue = npcSellValue
-            else
+            else:
                 npcSellValue = None
         except: 
             pass
-    if actualMinValue != None and actualMaxValue != None
-        if actualMinValue > actualMaxValue
+    if actualMinValue != None and actualMaxValue != None:
+        if actualMinValue > actualMaxValue:
             actualMinValue = actualMaxValue
-    elif actualMinValue == None and actualMaxValue != None
+    elif actualMinValue == None and actualMaxValue != None:
         actualMinValue = actualMaxValue
 
     name = title
