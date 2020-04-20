@@ -99,7 +99,7 @@ c = conn.cursor()
 
 if not skipLoading:
     root = xml.etree.ElementTree.parse(tibia_xml_file).getroot()
-    c.execute('CREATE TABLE Items(id INTEGER PRIMARY KEY AUTOINCREMENT, title STRING, name STRING, vendor_value BIGINT, actual_value BIGINT, capacity FLOAT, stackable BOOLEAN, image BLOB, category STRING, discard BOOLEAN, convert_to_gold BOOLEAN, look_text STRING, currency INTEGER)')
+    c.execute('CREATE TABLE Items(id INTEGER PRIMARY KEY AUTOINCREMENT, title STRING, name STRING, npc_buy_value BIGINT, npc_sell_value BIGINT, actual_min_value BIGINT, actual_max_value BIGINT, capacity FLOAT, stackable BOOLEAN, image BLOB, category STRING, discard BOOLEAN, convert_to_gold BOOLEAN, look_text STRING, currency INTEGER)')
     c.execute('CREATE TABLE ItemProperties(itemid INTEGER, property STRING, value STRING)')
     c.execute('CREATE TABLE NPCs(id INTEGER PRIMARY KEY AUTOINCREMENT, title STRING, name STRING, city STRING, job STRING, x INTEGER, y INTEGER, z INTEGER, image BLOB)')
     c.execute('CREATE TABLE NPCDestinations(npcid INTEGER, destination STRING, cost INTEGER, notes STRING)')
@@ -171,10 +171,10 @@ if not skipLoading:
         #     print('Quest', title)
         #     if not parseQuest(title, attributes, c, rewardItems, questDangers, getURL):
         #         print('Quest failed', title)
-        # elif wordCount(lcontent, '{{infobox item') == 1 or wordCount(lcontent, '{{infobox_item') == 1:
-        #     print('Item', title)
-        #     if not parseItem(title, attributes, c, buyitems, sellitems, currencymap, durationCostMap, getURL):
-        #         print('Item failed', title)
+        if wordCount(lcontent, '{{infobox item') == 1 or wordCount(lcontent, '{{infobox_item') == 1:
+            print('Item', title)
+            if not parseItem(title, attributes, c, buyitems, sellitems, currencymap, durationCostMap, getURL):
+                print('Item failed', title)
         # elif wordCount(lcontent, '{{infobox npc') == 1 or wordCount(lcontent, '{{infobox_npc') == 1:
         #     print('NPC', title)
         #     if not parseNPC(title, attributes, c, spells, getURL):
@@ -183,10 +183,10 @@ if not skipLoading:
         #     print('Spell', title)
         #     if not parseSpell(title, attributes, c, getURL):
         #         print('Spell failed', title)
-        if wordCount(lcontent, '{{infobox creature') == 1 or wordCount(lcontent, '{{infobox_creature') == 1:
-            print('Creature', title)
-            if not parseCreature(title, attributes, c, creaturedrops, getURL):
-                print('Creature failed', title)
+        # elif wordCount(lcontent, '{{infobox creature') == 1 or wordCount(lcontent, '{{infobox_creature') == 1:
+        #     print('Creature', title)
+        #     if not parseCreature(title, attributes, c, creaturedrops, getURL):
+        #         print('Creature failed', title)
         # elif wordCount(lcontent, 'infobox outfit') == 1 or wordCount(lcontent, 'infobox_outfit') == 1:
         #     print('Outfit', title)
         #     if not parseOutfit(title, attributes, c, getURL):

@@ -46,28 +46,33 @@ consumableMap = {
 
 
 def parseItem(title, attributes, c, buyitems, sellitems, currencymap, durationMap, getURL):
-    npcValue = None
-    if 'npcvalue' in attributes:
-        try: npcValue = int(attributes['npcvalue'])
-        except: pass
-    if (npcValue == None or npcValue == 0) and 'npcprice' in attributes:
-        try: npcValue = int(attributes['npcprice'])
-        except: pass
-    actualValue = None
+    actualMinValue = None
+    actualMaxValue = None
     if 'value' in attributes: 
-        match = numberRegex.search(attributes['value'])
-        if match != None: 
-            actualValue = int(match.groups()[0].replace(',','').replace('.',''))
-    npcPrice = None
+        valueRange = re.sub('\(.+|[^0-9\-]', '', attributes['value']).split('-')
+        try:
+            actualMinValue = int(valueRange[0])
+            actualMinValue = actualMinValue if actualMinValue > 0 else None
+        except: pass
+
+        try:
+            actualMaxValue = int(valueRange[1]) if len(valueRange) > 1 else None
+            actualMaxValue = actualMaxValue if actualMaxValue > 0 else None
+        except: pass
+    npcBuyValue = None
+    if 'npcvalue' in attributes:
+        try:
+            npcBuyValue = int(attributes['npcvalue'])
+            npcBuyValue = npcBuyValue if npcBuyValue > 0 else None
+        except:
+            pass
+    npcSellValue = None
     if 'npcprice' in attributes:
         try: 
-            npcPrice = int(attributes['npcprice'])
-            if actualValue != None and npcPrice > 0 and actualValue > npcPrice:
-                actualValue = npcPrice
+            npcSellValue = int(attributes['npcprice'])
+            npcSellValue = npcSellValue if npcSellValue > 0 else None
         except: 
             pass
-    if npcValue != None and (actualValue == None or npcValue > actualValue):
-        actualValue = npcValue
     name = title
     if 'actualname' in attributes and len(attributes['actualname']) > 0:
         name = attributes['actualname']
@@ -128,12 +133,12 @@ def parseItem(title, attributes, c, buyitems, sellitems, currencymap, durationMa
             look_text = look_text[:match.start()] + look_text[match.end():]
     convert_to_gold, discard = False, False
 
-    gold_ratio = max(0 if npcValue == None else npcValue, 0 if actualValue == None else actualValue) / (1 if capacity == None or capacity == 0 else capacity)
+    gold_ratio = max(0 if npcBuyValue == None else npcBuyValue, 0 if actualMinValue == None else actualMinValue) / (1 if capacity == None or capacity == 0 else capacity)
     if gold_ratio < 10: discard = True
     if gold_ratio < 20 and stackable == False: convert_to_gold = True
     else: convert_to_gold = False
 
-    c.execute('INSERT INTO Items (title,name, vendor_value, actual_value, capacity, stackable, image, category, discard, convert_to_gold, look_text) VALUES (?,?,?,?,?,?,?,?,?,?,?)', (title,name, npcValue, actualValue, capacity, stackable, image, category, discard, convert_to_gold, look_text))
+    c.execute('INSERT INTO Items (title,name, npc_buy_value, npc_sell_value, actual_min_value, actual_max_value, capacity, stackable, image, category, discard, convert_to_gold, look_text) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)', (title,name, npcBuyValue, npcSellValue, actualMinValue, actualMaxValue, capacity, stackable, image, category, discard, convert_to_gold, look_text))
     itemid = c.lastrowid
     if 'itemid' in attributes:
         splits = attributes['itemid'].split(',')
@@ -149,7 +154,7 @@ def parseItem(title, attributes, c, buyitems, sellitems, currencymap, durationMa
         for n in npcs:
             npc = n
             if npc == '' or npc == '-' or npc == '--': continue
-            value = npcPrice
+            value = npcSellValue
             if ';' in npc: 
                 npc = npc.split(';')[0]
             if ':' in npc:
@@ -174,7 +179,7 @@ def parseItem(title, attributes, c, buyitems, sellitems, currencymap, durationMa
         for n in npcs:
             npc = n
             if npc == '' or npc == '-' or npc == '--': continue
-            value = npcValue
+            value = npcBuyValue
             if ';' in npc: 
                 npc = npc.split(';')[0]
             if ':' in npc:
