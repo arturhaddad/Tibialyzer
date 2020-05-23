@@ -46,27 +46,33 @@ consumableMap = {
 
 
 def parseItem(title, attributes, c, buyitems, sellitems, currencymap, durationMap, getURL):
-    actualMinValue = None
-    actualMaxValue = None
+    minValue = None
+    maxValue = None
     if 'value' in attributes: 
         valueRange = attributes['value'].replace(' to ', '-').replace('on', '(')
         valueRange = re.sub('\(.+|[^0-9\-]', '', valueRange).split('-')
         try:
-            actualMinValue = int(valueRange[0])
-            actualMinValue = actualMinValue if actualMinValue > 0 else None
+            minValue = int(valueRange[0])
+            minValue = minValue if minValue > 0 else None
         except: pass
 
         try:
-            actualMaxValue = int(valueRange[1]) if len(valueRange) > 1 else None
-            actualMaxValue = actualMaxValue if actualMaxValue > 0 else None
+            maxValue = int(valueRange[1]) if len(valueRange) > 1 else None
+            maxValue = maxValue if maxValue > 0 else None
+        except: pass
+
+        try:
+            maxValue = minValue if maxValue < minValue
         except: pass
     npcBuyValue = None
     if 'npcvalue' in attributes:
         try:
             npcBuyValue = int(attributes['npcvalue'])
             if npcBuyValue > 0:
-                if actualMinValue == None or actualMinValue < npcBuyValue:
-                    actualMinValue = npcBuyValue
+                if minValue == None or minValue < npcBuyValue:
+                    minValue = npcBuyValue
+                if maxValue == None or maxValue < npcBuyValue:
+                    maxValue = npcBuyValue
             else:
                 npcBuyValue = None
         except:
@@ -76,17 +82,19 @@ def parseItem(title, attributes, c, buyitems, sellitems, currencymap, durationMa
         try: 
             npcSellValue = int(attributes['npcprice'])
             if npcSellValue > 0:
-                if actualMaxValue == None or actualMaxValue > npcSellValue:
-                    actualMaxValue = npcSellValue
+                if minValue == None or minValue > npcSellValue:
+                    minValue = npcSellValue
+                if maxValue == None or maxValue > npcSellValue:
+                    maxValue = npcSellValue
             else:
                 npcSellValue = None
         except: 
             pass
-    if actualMinValue != None and actualMaxValue != None:
-        if actualMinValue > actualMaxValue:
-            actualMinValue = actualMaxValue
-    elif actualMinValue == None and actualMaxValue != None:
-        actualMinValue = actualMaxValue
+    if minValue != None and maxValue != None:
+        if minValue > maxValue:
+            minValue = maxValue
+    elif minValue == None and maxValue != None:
+        minValue = maxValue
 
     name = title
     if 'actualname' in attributes and len(attributes['actualname']) > 0:
@@ -148,12 +156,12 @@ def parseItem(title, attributes, c, buyitems, sellitems, currencymap, durationMa
             look_text = look_text[:match.start()] + look_text[match.end():]
     convert_to_gold, discard = False, False
 
-    gold_ratio = max(0 if npcBuyValue == None else npcBuyValue, 0 if actualMinValue == None else actualMinValue) / (1 if capacity == None or capacity == 0 else capacity)
+    gold_ratio = max(0 if npcBuyValue == None else npcBuyValue, 0 if minValue == None else minValue) / (1 if capacity == None or capacity == 0 else capacity)
     if gold_ratio < 10: discard = True
     if gold_ratio < 20 and stackable == False: convert_to_gold = True
     else: convert_to_gold = False
 
-    c.execute('INSERT INTO Items (title,name, npc_buy_value, npc_sell_value, actual_min_value, actual_max_value, capacity, stackable, image, category, discard, convert_to_gold, look_text) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)', (title,name, npcBuyValue, npcSellValue, actualMinValue, actualMaxValue, capacity, stackable, image, category, discard, convert_to_gold, look_text))
+    c.execute('INSERT INTO Items (title,name, npc_buy_value, npc_sell_value, actual_min_value, actual_max_value, capacity, stackable, image, category, discard, convert_to_gold, look_text) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)', (title,name, npcBuyValue, npcSellValue, minValue, maxValue, capacity, stackable, image, category, discard, convert_to_gold, look_text))
     itemid = c.lastrowid
     if 'itemid' in attributes:
         splits = attributes['itemid'].split(',')
