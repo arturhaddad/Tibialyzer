@@ -62,7 +62,8 @@ def parseItem(title, attributes, c, buyitems, sellitems, currencymap, durationMa
         except: pass
 
         try:
-            maxValue = minValue if maxValue < minValue
+            if maxValue < minValue:
+                maxValue = minValue
         except: pass
     npcBuyValue = None
     if 'npcvalue' in attributes:
