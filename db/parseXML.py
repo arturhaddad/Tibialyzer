@@ -183,10 +183,10 @@ if not skipLoading:
         #     print('Spell', title)
         #     if not parseSpell(title, attributes, c, getURL):
         #         print('Spell failed', title)
-        # elif wordCount(lcontent, '{{infobox creature') == 1 or wordCount(lcontent, '{{infobox_creature') == 1:
-        #     print('Creature', title)
-        #     if not parseCreature(title, attributes, c, creaturedrops, getURL):
-        #         print('Creature failed', title)
+        elif wordCount(lcontent, '{{infobox creature') == 1 or wordCount(lcontent, '{{infobox_creature') == 1:
+            print('Creature', title)
+            if not parseCreature(title, attributes, c, creaturedrops, getURL):
+                print('Creature failed', title)
         # elif wordCount(lcontent, 'infobox outfit') == 1 or wordCount(lcontent, 'infobox_outfit') == 1:
         #     print('Outfit', title)
         #     if not parseOutfit(title, attributes, c, getURL):
