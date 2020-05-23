@@ -60,11 +60,6 @@ def parseItem(title, attributes, c, buyitems, sellitems, currencymap, durationMa
             maxValue = int(valueRange[1]) if len(valueRange) > 1 else None
             maxValue = maxValue if maxValue > 0 else None
         except: pass
-
-        try:
-            if maxValue < minValue:
-                maxValue = minValue
-        except: pass
     npcBuyValue = None
     if 'npcvalue' in attributes:
         try:
@@ -72,31 +67,20 @@ def parseItem(title, attributes, c, buyitems, sellitems, currencymap, durationMa
             if npcBuyValue > 0:
                 if minValue == None or minValue < npcBuyValue:
                     minValue = npcBuyValue
-                if maxValue == None or maxValue < npcBuyValue:
+                if maxValue != None and maxValue < npcBuyValue:
                     maxValue = npcBuyValue
             else:
                 npcBuyValue = None
-        except:
-            pass
+        except: pass
     npcSellValue = None
     if 'npcprice' in attributes:
         try: 
             npcSellValue = int(attributes['npcprice'])
-            if npcSellValue > 0:
-                if minValue == None or minValue > npcSellValue:
-                    minValue = npcSellValue
-                if maxValue == None or maxValue > npcSellValue:
-                    maxValue = npcSellValue
-            else:
+            if npcSellValue <= 0:
                 npcSellValue = None
-        except: 
-            pass
-    if minValue != None and maxValue != None:
-        if minValue > maxValue:
-            minValue = maxValue
-    elif minValue == None and maxValue != None:
-        minValue = maxValue
-
+        except: pass
+    if minValue != None and maxValue != None and minValue > maxValue:
+        maxValue = None
     name = title
     if 'actualname' in attributes and len(attributes['actualname']) > 0:
         name = attributes['actualname']
