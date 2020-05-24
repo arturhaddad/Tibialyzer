@@ -23,28 +23,41 @@ def parseKey(title, attributes, c, keyImages, buyitems, sellitems, getURL):
         # then take care of [[Fire Rune]] => Fire Rune
         aka_text = re.sub(r'\[\[([^]]+)\]\]', '\g<1>', aka_text)
         name = "%s (%s)" % (name, aka_text)
-    npcValue = None
-    if 'npcvalue' in attributes:
-        try: npcValue = int(attributes['npcvalue'])
-        except: pass
-    if (npcValue == None or npcValue == 0) and 'npcprice' in attributes:
-        try: npcValue = int(attributes['npcprice'])
-        except: pass
-    actualValue = None
+    minValue = None
+    maxValue = None
     if 'value' in attributes: 
-        match = numberRegex.search(attributes['value'])
-        if match != None: 
-            actualValue = int(match.groups()[0].replace(',','').replace('.',''))
-    npcPrice = None
+        valueRange = attributes['value'].replace(' to ', '-').replace('on', '(')
+        valueRange = re.sub('\(.+|[^0-9\-]', '', valueRange).split('-')
+        try:
+            minValue = int(valueRange[0])
+            minValue = minValue if minValue > 0 else None
+        except: pass
+
+        try:
+            maxValue = int(valueRange[1]) if len(valueRange) > 1 else None
+            maxValue = maxValue if maxValue > 0 else None
+        except: pass
+    npcBuyValue = None
+    if 'npcvalue' in attributes:
+        try:
+            npcBuyValue = int(attributes['npcvalue'])
+            if npcBuyValue > 0:
+                if minValue == None or minValue < npcBuyValue:
+                    minValue = npcBuyValue
+                if maxValue != None and maxValue < npcBuyValue:
+                    maxValue = npcBuyValue
+            else:
+                npcBuyValue = None
+        except: pass
+    npcSellValue = None
     if 'npcprice' in attributes:
         try: 
-            npcPrice = int(attributes['npcprice'])
-            if actualValue != None and npcPrice > 0 and actualValue > npcPrice:
-                actualValue = npcPrice
-        except: 
-            pass
-    if npcValue != None and (actualValue == None or npcValue > actualValue):
-        actualValue = npcValue
+            npcSellValue = int(attributes['npcprice'])
+            if npcSellValue <= 0:
+                npcSellValue = None
+        except: pass
+    if minValue != None and maxValue != None and minValue > maxValue:
+        maxValue = None
 
     stackable = False
     capacity = 1
@@ -75,7 +88,7 @@ def parseKey(title, attributes, c, keyImages, buyitems, sellitems, getURL):
         if "<gallery>" in look_text:
             look_text = look_text.replace(look_text[look_text.find("<gallery>"):], "")
 
-    c.execute('INSERT INTO Items (title,name, vendor_value, actual_value, capacity, stackable, image, category, discard, convert_to_gold, look_text) VALUES (?,?,?,?,?,?,?,?,?,?,?)', (title,name, npcValue, actualValue, capacity, stackable, image, category, discard, convert_to_gold, look_text))
+    c.execute('INSERT INTO Items (title,name, npc_buy_value, npc_sell_value, actual_min_value, actual_max_value, capacity, stackable, image, category, discard, convert_to_gold, look_text) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)', (title,name, npcBuyValue, npcSellValue, minValue, maxValue, capacity, stackable, image, category, discard, convert_to_gold, look_text))
     itemid = c.lastrowid
     keyImages[itemid] = attributes['primarytype']
     if 'buyfrom' in attributes:
