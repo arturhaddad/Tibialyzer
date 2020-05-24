@@ -97,7 +97,7 @@ def parseKey(title, attributes, c, keyImages, buyitems, sellitems, getURL):
         for n in npcs:
             npc = n
             if npc == '' or npc == '-' or npc == '--': continue
-            value = npcPrice
+            value = npcSellValue
             if ';' in npc: 
                 npc = npc.split(';')[0]
             if ':' in npc:
@@ -122,7 +122,7 @@ def parseKey(title, attributes, c, keyImages, buyitems, sellitems, getURL):
         for n in npcs:
             npc = n
             if npc == '' or npc == '-' or npc == '--': continue
-            value = npcValue
+            value = npcBuyValue
             if ';' in npc: 
                 npc = npc.split(';')[0]
             if ':' in npc:
