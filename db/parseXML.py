@@ -107,7 +107,7 @@ if not skipLoading:
     c.execute('CREATE TABLE BuyItems(itemid INTEGER, vendorid INTEGER, value INTEGER)')
     c.execute('CREATE TABLE Creatures(id INTEGER PRIMARY KEY AUTOINCREMENT, title STRING, name STRING, health INTEGER, experience INTEGER, maxdamage INTEGER, summon INTEGER, illusionable BOOLEAN, pushable BOOLEAN, pushes BOOLEAN, physical INTEGER, holy INTEGER, death INTEGER, fire INTEGER, energy INTEGER, ice INTEGER, earth INTEGER, drown INTEGER, lifedrain INTEGER, paralysable BOOLEAN, senseinvis BOOLEAN, image BLOB, abilities STRING, speed INTEGER, armor INTEGER, boss BOOLEAN, notes STRING, strategy STRING, behaviour STRING, convince INTEGER, bestiaryname STRING, bestiarytext STRING, bestiarylevel STRING, occurrence STRING, heal INTEGER, runsat INTEGER)')
     c.execute('CREATE TABLE CreatureDrops(creatureid INTEGER, itemid INTEGER, percentage FLOAT, min INTEGER, max INTEGER)')
-    c.execute('CREATE TABLE HuntingPlaces(id INTEGER PRIMARY KEY AUTOINCREMENT, name STRING, level INTEGER, exprating INTEGER, lootrating INTEGER, image STRING, city STRING)')
+    c.execute('CREATE TABLE HuntingPlaces(id INTEGER PRIMARY KEY AUTOINCREMENT, name STRING, city STRING, coordinates STRING)')
     c.execute('CREATE TABLE HuntingPlaceCoordinates(huntingplaceid INTEGER, x INTEGER, y INTEGER, z INTEGER)')
     c.execute('CREATE TABLE HuntingPlaceCreatures(huntingplaceid INTEGER, creatureid INTEGER)')  
     c.execute('CREATE TABLE Spells(id INTEGER PRIMARY KEY AUTOINCREMENT, name STRING, words STRING,element INTEGER, cooldown INTEGER, premium BOOLEAN, promotion BOOLEAN, levelrequired INTEGER, goldcost INTEGER, manacost INTEGER, knight BOOLEAN, paladin BOOLEAN, sorcerer BOOLEAN, druid BOOLEAN, image BLOB)')
