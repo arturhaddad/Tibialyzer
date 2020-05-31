@@ -163,7 +163,7 @@ if not skipLoading:
         if '/Spoiler' in title:
             quest = title.replace('/Spoiler', '')
             questNPCs[quest] = re.findall('\[\[([^]|]+)(?:|[^]]+)?\]\]', lcontent)
-        elif wordCount(lcontent, 'infobox hunt|') == 1 or wordCount(lcontent, 'infobox_hunt|') == 1:
+        elif wordCount(lcontent, 'infobox hunt') > 0 or wordCount(lcontent, 'infobox_hunt') > 0:
             print('Hunt', title)
             if not parseHunt(title, attributes, c, content, huntcreatures, getURL):
                 print('Hunt failed', title)
